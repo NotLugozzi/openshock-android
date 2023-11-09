@@ -11,7 +11,7 @@ Get both [flutter](https://flutter.dev/) and [android studio](https://developer.
 
 `flutter --version`
 
-then cd in the repository folder and run the following commands. You'll be greeted by a first time setup that will check for platform tools, dependencies and possible missing stuff. build artifacts will be in the "android" subfolder inside the repo
+then cd in the repository folder and run the following commands. You'll be greeted by a first time setup that will check for platform tools, dependencies and possible missing stuff. build artifacts won't be saved when building for android unless running the build command
 
 ```bash
 flutter run
@@ -21,5 +21,5 @@ flutter run
 
 Grab one of the releases from the releases page or run. production artifacts will be found in the android directory
 ```bash
-flutter build
+flutter build apk
 ```
