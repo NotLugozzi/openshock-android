@@ -19,7 +19,7 @@ flutter run
 
 # Installing
 
-Grab one of the releases from the releases page or run. production artifacts will be found in the android directory
+Grab one of the releases from the releases page or run. production artifacts will be found in the `build\app\outputs\flutter-apk\` directory
 ```bash
 flutter build apk
 ```
