@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import HapticFeedback
 import 'package:OpenshockCompanion/settings_page.dart' show SettingsPage;
 import 'package:OpenshockCompanion/api_handler.dart' show sendApiRequest;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,6 +98,7 @@ class _SliderPageState extends State<SliderPage> {
                     if (intensityValue < 1 || timeValue < 1) {
                       // Display a warning, no need for a toast
                     } else {
+                      HapticFeedback.vibrate(); // Add haptic feedback
                       sendApiRequest(intensityValue, timeValue, 1);
                     }
                   },
@@ -109,6 +111,7 @@ class _SliderPageState extends State<SliderPage> {
                     if (intensityValue < 1 || timeValue < 1) {
                       // Display a warning, no need for a toast
                     } else {
+                      HapticFeedback.vibrate(); // Add haptic feedback
                       sendApiRequest(intensityValue, timeValue, 2);
                     }
                   },
@@ -130,7 +133,6 @@ class _SliderPageState extends State<SliderPage> {
     );
   }
 }
-
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
