@@ -6,6 +6,20 @@
 
 Flutter application to manage and control openshock devices from your phone
 
+
+# Installing
+## Stable release channel
+### **Release builds are currently broken! if you know how to flutter shoot me a dm on discord @olbiaphlee, we can get in touch to get it to work!**
+Grab one of the builds from the releases page or run:
+```bash
+flutter build apk
+```
+
+production artifacts will be found in the `build\app\outputs\apk\` directory
+
+## RRC
+There's also a Rolling release available as a github action artifact. it runs every time i commit so it might be up to date but also really, really broken
+
 # Testing
 Get both [flutter](https://flutter.dev/) and [android studio](https://developer.android.com/studio), make sure to be able to reach flutter from any terminal by running 
 
@@ -16,12 +30,3 @@ then cd in the repository folder and run the following commands. You'll be greet
 ```bash
 flutter run
 ```
-
-# Installing
-### **Release builds are currently broken! if you know how to flutter shoot me a dm on discord @olbiaphlee, we can get in touch to get it to work!**
-Grab one of the builds from the releases page or run:
-```bash
-flutter build apk
-```
-
-production artifacts will be found in the `build\app\outputs\apk\` directory
