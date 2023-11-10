@@ -45,8 +45,8 @@ android {
         applicationId "com.olbiaphlee.openshock_android"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 30
-        targetSdkVersion 30
+        minSdkVersion 32
+        targetSdkVersion 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
