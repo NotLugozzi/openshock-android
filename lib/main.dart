@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:OpenshockCompanion/settings_page.dart' show SettingsPage;
+import 'package:OpenshockCompanion/LogsPage.dart' show LogsPage;
 import 'package:OpenshockCompanion/api_handler.dart' show sendApiRequest;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +11,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
 }
 
 class SliderPage extends StatefulWidget {
-  const SliderPage({super.key});
+  const SliderPage({Key? key}) : super(key: key);
 
   @override
   _SliderPageState createState() => _SliderPageState();
@@ -45,6 +46,7 @@ class SliderPage extends StatefulWidget {
 class _SliderPageState extends State<SliderPage> {
   int intensityValue = 0;
   int timeValue = 0;
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -124,17 +126,48 @@ class _SliderPageState extends State<SliderPage> {
                 ),
               ],
             ),
-            ElevatedButton(
-              child: const Text('Settings'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
-                );
-              },
-            ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+            if (index == 0) {
+              // Home tab
+            } else if (index == 1) {
+              // Settings tab
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
+            } else if (index == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LogsPage()),
+              );
+            }
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Logs',
+          ),
+        ],
+        selectedItemColor: const Color.fromARGB(255, 211, 187, 255), // or any color you prefer
+        unselectedItemColor: Theme.of(context).textTheme.bodySmall?.color,
+        showUnselectedLabels: true,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }

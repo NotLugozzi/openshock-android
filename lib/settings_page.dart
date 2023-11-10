@@ -1,9 +1,9 @@
-// settings_page.dart
+import 'package:OpenshockCompanion/LogsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  const SettingsPage({Key? key});
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -105,6 +105,38 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Logs',
+          ),
+        ],
+        currentIndex: 1, // Set the current index to 1 for the Settings page
+        onTap: (index) {
+          if (index == 0) {
+            // Navigate back to the main page
+            Navigator.popUntil(context, (route) => route.isFirst);
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LogsPage()),
+            );
+          }
+        },
+        selectedItemColor: const Color.fromARGB(255, 211, 187, 255), // or any color you prefer
+        unselectedItemColor: Theme.of(context).textTheme.caption?.color,
+        showUnselectedLabels: true,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }
