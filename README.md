@@ -4,8 +4,10 @@
 > 
 ![lang](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white) ![os1](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
+
 Flutter application to manage and control openshock devices from your phone
 
+Current build status:  [![Flutter Build](https://github.com/NotLugozzi/openshock-android/actions/workflows/main.yml/badge.svg)](https://github.com/NotLugozzi/openshock-android/actions/workflows/main.yml)
 
 # Installing
 ## Stable release channel
