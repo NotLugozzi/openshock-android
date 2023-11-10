@@ -1,9 +1,10 @@
 // settings_page.dart
 import 'package:flutter/material.dart';
-import 'package:OpenshockCompanion/api_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -43,14 +44,14 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('API Key'),
+            const Text('API Key'),
             TextField(
               controller: apiKeyController,
               decoration: InputDecoration(
@@ -66,8 +67,8 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               obscureText: !showApiKey,
             ),
-            SizedBox(height: 16),
-            Text('Shocker ID'),
+            const SizedBox(height: 16),
+            const Text('Shocker ID'),
             TextField(
               controller: shockerIdController,
               decoration: InputDecoration(
@@ -83,10 +84,10 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               obscureText: !showShockerId,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Text('Dark Mode'),
+                const Text('Dark Mode'),
                 Switch(
                   value: isDarkMode,
                   onChanged: (value) {
@@ -97,10 +98,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
-              child: Text('Save'),
               onPressed: saveSettingsAndTheme,
+              child: const Text('Save'),
             ),
           ],
         ),

@@ -2,18 +2,19 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:OpenshockCompanion/api_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatelessWidget {
   final TextEditingController apiKeyController = TextEditingController();
   final TextEditingController shockerIdController = TextEditingController();
 
+  SettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -22,14 +23,14 @@ class SettingsPage extends StatelessWidget {
           children: [
             TextField(
               controller: apiKeyController,
-              decoration: InputDecoration(labelText: 'API Key'),
+              decoration: const InputDecoration(labelText: 'API Key'),
             ),
             TextField(
               controller: shockerIdController,
-              decoration: InputDecoration(labelText: 'Shocker ID'),
+              decoration: const InputDecoration(labelText: 'Shocker ID'),
             ),
             ElevatedButton( // Updated from RaisedButton to ElevatedButton
-              child: Text('Save and Login'),
+              child: const Text('Save and Login'),
               onPressed: () {
                 saveSettings(apiKeyController.text, shockerIdController.text);
                 Navigator.pop(context);

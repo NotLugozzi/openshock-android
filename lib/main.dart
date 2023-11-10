@@ -5,10 +5,12 @@ import 'package:OpenshockCompanion/api_handler.dart' show sendApiRequest;
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
 
         return MaterialApp(
           theme: isDarkMode ? darkTheme : lightTheme,
-          home: SliderPage(),
+          home: const SliderPage(),
           darkTheme: darkTheme,
           themeMode: ThemeMode.system, // Use ThemeMode.dark for always dark mode, ThemeMode.light for always light mode
         );
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
 }
 
 class SliderPage extends StatefulWidget {
+  const SliderPage({super.key});
+
   @override
   _SliderPageState createState() => _SliderPageState();
 }
@@ -46,7 +50,7 @@ class _SliderPageState extends State<SliderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Openshock Companion'),
+        title: const Text('Openshock Companion'),
       ),
       body: Align(
         alignment: Alignment.topCenter,
@@ -81,8 +85,8 @@ class _SliderPageState extends State<SliderPage> {
               },
             ),
             if (intensityValue < 1 || timeValue < 1)
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+              const Padding(
+                padding: EdgeInsets.only(top: 16.0),
                 child: Text(
                   'Warning: Intensity and time values must be at least 1',
                   style: TextStyle(color: Colors.red),
@@ -92,8 +96,8 @@ class _SliderPageState extends State<SliderPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                  icon: Icon(Icons.flash_on), // Lightning bolt icon
-                  label: Text('Shock'),
+                  icon: const Icon(Icons.flash_on), // Lightning bolt icon
+                  label: const Text('Shock'),
                   onPressed: () {
                     if (intensityValue < 1 || timeValue < 1) {
                       // Display a warning, no need for a toast
@@ -103,10 +107,10 @@ class _SliderPageState extends State<SliderPage> {
                     }
                   },
                 ),
-                SizedBox(width: 8.0), // Reduced padding here
+                const SizedBox(width: 8.0), // Reduced padding here
                 ElevatedButton.icon(
-                  icon: Icon(Icons.vibration), // Vibration icon
-                  label: Text('Vibrate'),
+                  icon: const Icon(Icons.vibration), // Vibration icon
+                  label: const Text('Vibrate'),
                   onPressed: () {
                     if (intensityValue < 1 || timeValue < 1) {
                       // Display a warning, no need for a toast
@@ -119,11 +123,11 @@ class _SliderPageState extends State<SliderPage> {
               ],
             ),
             ElevatedButton(
-              child: Text('Settings'),
+              child: const Text('Settings'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
                 );
               },
             ),
