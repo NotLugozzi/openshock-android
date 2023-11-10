@@ -18,8 +18,10 @@ flutter run
 ```
 
 # Installing
-
-Grab one of the releases from the releases page or run. production artifacts will be found in the `build\app\outputs\flutter-apk\` directory
+### **Release builds are currently broken! if you know how to flutter shoot me a dm on discord @olbiaphlee, we can get in touch to get it to work!**
+Grab one of the builds from the releases page or run:
 ```bash
 flutter build apk
 ```
+
+production artifacts will be found in the `build\app\outputs\apk\` directory
