@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import HapticFeedback
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:OpenshockCompanion/settings_page.dart' show SettingsPage;
 import 'package:OpenshockCompanion/api_handler.dart' show sendApiRequest;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,16 +15,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
-      // Fetch isDarkMode from SharedPreferences
       future: getIsDarkMode(),
       builder: (context, snapshot) {
-        final isDarkMode = snapshot.data ?? false; // Use false as a default value
+        final isDarkMode = snapshot.data ?? false;
 
         return MaterialApp(
           theme: isDarkMode ? darkTheme : lightTheme,
           home: const SliderPage(),
           darkTheme: darkTheme,
-          themeMode: ThemeMode.system, // Use ThemeMode.dark for always dark mode, ThemeMode.light for always light mode
+          themeMode: ThemeMode.system,
         );
       },
     );
@@ -96,27 +96,29 @@ class _SliderPageState extends State<SliderPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.flash_on), // Lightning bolt icon
+                  icon: const Icon(Icons.flash_on),
                   label: const Text('Shock'),
                   onPressed: () {
                     if (intensityValue < 1 || timeValue < 1) {
                       // Display a warning, no need for a toast
                     } else {
-                      HapticFeedback.vibrate(); // Add haptic feedback
+                      HapticFeedback.vibrate();
                       sendApiRequest(intensityValue, timeValue, 1);
+                      showToast('API request sent');
                     }
                   },
                 ),
-                const SizedBox(width: 8.0), // Reduced padding here
+                const SizedBox(width: 8.0),
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.vibration), // Vibration icon
+                  icon: const Icon(Icons.vibration),
                   label: const Text('Vibrate'),
                   onPressed: () {
                     if (intensityValue < 1 || timeValue < 1) {
                       // Display a warning, no need for a toast
                     } else {
-                      HapticFeedback.vibrate(); // Add haptic feedback
+                      HapticFeedback.vibrate();
                       sendApiRequest(intensityValue, timeValue, 2);
+                      showToast('API request sent');
                     }
                   },
                 ),
@@ -134,6 +136,18 @@ class _SliderPageState extends State<SliderPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 }
