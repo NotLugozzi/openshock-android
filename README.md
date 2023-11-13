@@ -1,5 +1,6 @@
 # openshock-android
 > Companion app for managing openshock-compatible devices
+> 
 > Minimum supported Android API: 31 (Android 12).
 > 
 
