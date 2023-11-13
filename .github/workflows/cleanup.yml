@@ -1,0 +1,30 @@
+name: Dart Fix
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # Every Monday at midnight UTC
+
+jobs:
+  dart-fix:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Dart
+      uses: dart-lang/setup-dart@v2
+
+    - name: Get Dependencies
+      run: flutter pub get
+
+    - name: Run dart fix
+      run: dart fix --apply
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "[Chore] dart code actions"
+        git push
