@@ -5,9 +5,19 @@ import 'package:OpenshockCompanion/settings_page.dart' show SettingsPage;
 import 'package:OpenshockCompanion/LogsPage.dart' show LogsPage;
 import 'package:OpenshockCompanion/api_handler.dart' show sendApiRequest;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bottom_bar.dart';
+import 'app_state.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppState()), // Add this line
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,6 +44,12 @@ class MyApp extends StatelessWidget {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isDarkMode') ?? false;
   }
+
+  Future<void> getLimits() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String intensityLimit = prefs.getString('intensityLimit') ?? '';
+    final String durationLimit = prefs.getString('durationLimit') ?? '';
+  }
 }
 
 class SliderPage extends StatefulWidget {
@@ -44,12 +60,13 @@ class SliderPage extends StatefulWidget {
 }
 
 class _SliderPageState extends State<SliderPage> {
-  int intensityValue = 0;
-  int timeValue = 0;
-  int currentIndex = 0;
+  int intensityValue = 1;
+  int timeValue = 1;
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Openshock Companion'),
@@ -64,7 +81,7 @@ class _SliderPageState extends State<SliderPage> {
             ),
             Slider(
               value: intensityValue.toDouble(),
-              min: 0,
+              min: 1,
               max: 100,
               onChanged: (value) {
                 setState(() {
@@ -78,7 +95,7 @@ class _SliderPageState extends State<SliderPage> {
             ),
             Slider(
               value: timeValue.toDouble(),
-              min: 0,
+              min: 1,
               max: 30,
               onChanged: (value) {
                 setState(() {
@@ -129,12 +146,13 @@ class _SliderPageState extends State<SliderPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
+      bottomNavigationBar: BottomBar(
+        currentIndex: appState.currentIndex,
         onTap: (index) {
+          appState.currentIndex = index;
           setState(() {
-            currentIndex = index;
             if (index == 0) {
+              appState.currentIndex = 0; // Reset to home index
               // Home tab
             } else if (index == 1) {
               // Settings tab
@@ -150,24 +168,6 @@ class _SliderPageState extends State<SliderPage> {
             }
           });
         },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Logs',
-          ),
-        ],
-        selectedItemColor: const Color.fromARGB(255, 211, 187, 255), // or any color you prefer
-        unselectedItemColor: Theme.of(context).textTheme.bodySmall?.color,
-        showUnselectedLabels: true,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }

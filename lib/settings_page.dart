@@ -1,6 +1,11 @@
-import 'package:OpenshockCompanion/LogsPage.dart';
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bottom_bar.dart';
+import 'app_state.dart'; // Import the AppState class
+import 'LogsPage.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key});
@@ -12,10 +17,12 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController apiKeyController = TextEditingController();
   final TextEditingController shockerIdController = TextEditingController();
+  final TextEditingController intensityLimitController =
+      TextEditingController();
+  final TextEditingController durationLimitController = TextEditingController();
 
   bool showApiKey = false;
   bool showShockerId = false;
-  bool isDarkMode = false;
 
   @override
   void initState() {
@@ -28,20 +35,26 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {
       apiKeyController.text = prefs.getString('apiKey') ?? '';
       shockerIdController.text = prefs.getString('shockerId') ?? '';
-      isDarkMode = prefs.getBool('isDarkMode') ?? false;
+      intensityLimitController.text = prefs.getString('intensityLimit') ?? '';
+      durationLimitController.text = prefs.getString('durationLimit') ?? '';
     });
   }
 
-  Future<void> saveSettingsAndTheme() async {
+  Future<void> saveSettings() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('apiKey', apiKeyController.text);
     prefs.setString('shockerId', shockerIdController.text);
-    prefs.setBool('isDarkMode', isDarkMode);
+    intensityLimitController.text =
+        prefs.getString('intensityLimit') ?? '100'; // Default to 100
+    durationLimitController.text =
+        prefs.getString('durationLimit') ?? '30'; // Default to 30
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -57,7 +70,8 @@ class _SettingsPageState extends State<SettingsPage> {
               decoration: InputDecoration(
                 labelText: 'API Key',
                 suffixIcon: IconButton(
-                  icon: Icon(showApiKey ? Icons.visibility_off : Icons.visibility),
+                  icon: Icon(
+                      showApiKey ? Icons.visibility_off : Icons.visibility),
                   onPressed: () {
                     setState(() {
                       showApiKey = !showApiKey;
@@ -74,7 +88,8 @@ class _SettingsPageState extends State<SettingsPage> {
               decoration: InputDecoration(
                 labelText: 'Shocker ID',
                 suffixIcon: IconButton(
-                  icon: Icon(showShockerId ? Icons.visibility_off : Icons.visibility),
+                  icon: Icon(
+                      showShockerId ? Icons.visibility_off : Icons.visibility),
                   onPressed: () {
                     setState(() {
                       showShockerId = !showShockerId;
@@ -85,58 +100,45 @@ class _SettingsPageState extends State<SettingsPage> {
               obscureText: !showShockerId,
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                const Text('Dark Mode'),
-                Switch(
-                  value: isDarkMode,
-                  onChanged: (value) {
-                    setState(() {
-                      isDarkMode = value;
-                    });
-                  },
-                ),
-              ],
+            const Text('Intensity Limit'),
+            TextField(
+              controller: intensityLimitController,
+              decoration: const InputDecoration(
+                labelText: 'Intensity Limit',
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text('Duration Limit'),
+            TextField(
+              controller: durationLimitController,
+              decoration: const InputDecoration(
+                labelText: 'Duration Limit',
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: saveSettingsAndTheme,
+              onPressed: saveSettings,
               child: const Text('Save'),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Logs',
-          ),
-        ],
-        currentIndex: 1, // Set the current index to 1 for the Settings page
+      bottomNavigationBar: BottomBar(
+        currentIndex: appState.currentIndex,
         onTap: (index) {
-          if (index == 0) {
-            // Navigate back to the main page
-            Navigator.popUntil(context, (route) => route.isFirst);
-          } else if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const LogsPage()),
-            );
-          }
+          appState.currentIndex = index;
+          setState(() {
+            if (index == 0) {
+              appState.currentIndex = 0;
+              Navigator.popUntil(context, (route) => route.isFirst);
+            } else if (index == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LogsPage()),
+              );
+            }
+          });
         },
-        selectedItemColor: const Color.fromARGB(255, 211, 187, 255), // or any color you prefer
-        unselectedItemColor: Theme.of(context).textTheme.caption?.color,
-        showUnselectedLabels: true,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }

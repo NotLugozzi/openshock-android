@@ -1,9 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:OpenshockCompanion/settings_page.dart' show SettingsPage;
+import 'bottom_bar.dart';
+import 'app_state.dart'; // Import the AppState class
+import 'settings_page.dart';
+import 'package:provider/provider.dart';
+
 class LogsPage extends StatefulWidget {
   const LogsPage({Key? key}) : super(key: key);
 
@@ -30,7 +33,8 @@ class _LogsPageState extends State<LogsPage> {
       return;
     }
 
-    final url = 'https://api.shocklink.net/1/shockers/$shockerId/logs?offset=0&limit=30';
+    final url =
+        'https://api.shocklink.net/1/shockers/$shockerId/logs?offset=0&limit=30';
 
     final response = await http.get(Uri.parse(url), headers: {
       'accept': 'application/json',
@@ -56,6 +60,8 @@ class _LogsPageState extends State<LogsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Logs'),
@@ -79,13 +85,15 @@ class _LogsPageState extends State<LogsPage> {
                         DataColumn(label: Text('Duration (s)')),
                       ],
                       rows: logs.map((log) {
-                        final controlledBy = log['controlledBy'] as Map<String, dynamic>?;
+                        final controlledBy =
+                            log['controlledBy'] as Map<String, dynamic>?;
 
                         // Add null check for controlledBy
                         if (controlledBy != null) {
                           final name = controlledBy['name'] as String?;
                           final intensity = log['intensity'] as int?;
-                          final duration = (log['duration'] as int?)! / 1000; // Convert to seconds
+                          final duration = (log['duration'] as int?)! /
+                              1000; // Convert to seconds
 
                           // Add null checks for name and intensity
                           if (name != null && intensity != null) {
@@ -109,38 +117,24 @@ class _LogsPageState extends State<LogsPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Logs',
-          ),
-        ],
-        currentIndex: 2, // Set the current index to 2 for the Logs page
+      bottomNavigationBar: BottomBar(
+        currentIndex: appState.currentIndex,
         onTap: (index) {
-          if (index == 0) {
-            // Navigate back to the main page
-            Navigator.popUntil(context, (route) => route.isFirst);
-          } else if (index == 1) {
-            // Navigate to the Settings page
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SettingsPage()),
-            );
-          }
+          appState.currentIndex = index;
+          setState(() {
+            if (index == 0) {
+              appState.currentIndex = 0; // Reset to home index
+              // Navigate back to the main page
+              Navigator.popUntil(context, (route) => route.isFirst);
+            } else if (index == 1) {
+              // Navigate to the Settings page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
+            }
+          });
         },
-        selectedItemColor: const Color.fromARGB(255, 211, 187, 255), // or any color you prefer
-        unselectedItemColor: Theme.of(context).textTheme.bodySmall?.color,
-        showUnselectedLabels: true,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }
