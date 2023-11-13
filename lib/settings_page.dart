@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_bar.dart';
-import 'app_state.dart'; // Import the AppState class
+import 'app_state.dart';
 import 'LogsPage.dart';
 import 'package:provider/provider.dart';
 
@@ -44,10 +44,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('apiKey', apiKeyController.text);
     prefs.setString('shockerId', shockerIdController.text);
-    intensityLimitController.text =
-        prefs.getString('intensityLimit') ?? '100'; // Default to 100
-    durationLimitController.text =
-        prefs.getString('durationLimit') ?? '30'; // Default to 30
+    intensityLimitController.text = prefs.getString('intensityLimit') ?? '100';
+    durationLimitController.text = prefs.getString('durationLimit') ?? '30';
     Navigator.pop(context);
   }
 

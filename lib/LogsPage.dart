@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_bar.dart';
-import 'app_state.dart'; // Import the AppState class
+import 'app_state.dart';
 import 'settings_page.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +29,7 @@ class _LogsPageState extends State<LogsPage> {
     final shockerId = prefs.getString('shockerId');
 
     if (apiKey == null || shockerId == null) {
-      // Handle missing API key or shockerId
+      // fuck you i'm not going to properly handle missing stuff
       return;
     }
 
@@ -50,12 +50,31 @@ class _LogsPageState extends State<LogsPage> {
         });
       }
     } else {
-      // Handle API request error
+      // fuck you i'm not going to properly handle missing stuff
     }
   }
 
   Future<void> _handleRefresh() async {
     await fetchLogs();
+  }
+
+  Icon getIconForType(String type) {
+    print('Type: $type');
+    switch (type.toLowerCase()) {
+      case 'vibrate':
+        return const Icon(Icons.vibration);
+      case 'shock':
+        return const Icon(Icons.flash_on);
+      case 'sound':
+        return const Icon(Icons.volume_up);
+      default:
+        return const Icon(Icons.help);
+    }
+  }
+
+  String getDisplayName(Map<String, dynamic> controlledBy) {
+    final customName = controlledBy['customName'] as String?;
+    return customName ?? controlledBy['name'] as String? ?? 'Unknown';
   }
 
   @override
@@ -83,25 +102,23 @@ class _LogsPageState extends State<LogsPage> {
                         DataColumn(label: Text('Name')),
                         DataColumn(label: Text('Intensity')),
                         DataColumn(label: Text('Duration (s)')),
+                        DataColumn(label: Text('Type')),
                       ],
                       rows: logs.map((log) {
                         final controlledBy =
                             log['controlledBy'] as Map<String, dynamic>?;
-
-                        // Add null check for controlledBy
                         if (controlledBy != null) {
-                          final name = controlledBy['name'] as String?;
+                          final name = getDisplayName(controlledBy);
                           final intensity = log['intensity'] as int?;
-                          final duration = (log['duration'] as int?)! /
-                              1000; // Convert to seconds
-
-                          // Add null checks for name and intensity
-                          if (name != null && intensity != null) {
+                          final duration = (log['duration'] as int?)! / 1000;
+                          final type = log['type'] as String?;
+                          if (intensity != null && type != null) {
                             return DataRow(
                               cells: [
                                 DataCell(Text(name)),
                                 DataCell(Text(intensity.toString())),
                                 DataCell(Text(duration.toString())),
+                                DataCell(getIconForType(type)),
                               ],
                             );
                           }
@@ -123,11 +140,9 @@ class _LogsPageState extends State<LogsPage> {
           appState.currentIndex = index;
           setState(() {
             if (index == 0) {
-              appState.currentIndex = 0; // Reset to home index
-              // Navigate back to the main page
+              appState.currentIndex = 0;
               Navigator.popUntil(context, (route) => route.isFirst);
             } else if (index == 1) {
-              // Navigate to the Settings page
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsPage()),

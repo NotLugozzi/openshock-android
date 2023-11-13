@@ -13,7 +13,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AppState()), // Add this line
+        ChangeNotifierProvider(create: (_) => AppState()),
       ],
       child: const MyApp(),
     ),
@@ -119,7 +119,7 @@ class _SliderPageState extends State<SliderPage> {
                   label: const Text('Shock'),
                   onPressed: () {
                     if (intensityValue < 1 || timeValue < 1) {
-                      // Display a warning, no need for a toast
+                      // this whole thing was written by a silly little cat :3
                     } else {
                       HapticFeedback.vibrate();
                       sendApiRequest(intensityValue, timeValue, 1);
@@ -133,7 +133,6 @@ class _SliderPageState extends State<SliderPage> {
                   label: const Text('Vibrate'),
                   onPressed: () {
                     if (intensityValue < 1 || timeValue < 1) {
-                      // Display a warning, no need for a toast
                     } else {
                       HapticFeedback.vibrate();
                       sendApiRequest(intensityValue, timeValue, 2);
@@ -152,10 +151,8 @@ class _SliderPageState extends State<SliderPage> {
           appState.currentIndex = index;
           setState(() {
             if (index == 0) {
-              appState.currentIndex = 0; // Reset to home index
-              // Home tab
+              appState.currentIndex = 0;
             } else if (index == 1) {
-              // Settings tab
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsPage()),
@@ -206,11 +203,11 @@ final ThemeData darkTheme = ThemeData(
     bodyLarge: TextStyle(fontSize: 18, color: Colors.white70),
   ),
   appBarTheme: const AppBarTheme(
-    color: Colors.deepPurple,
+    color: Color.fromARGB(255, 124, 70, 216),
     iconTheme: IconThemeData(color: Colors.white),
   ),
   colorScheme: ColorScheme.fromSeed(
-    seedColor: Colors.deepPurple,
+    seedColor: const Color.fromARGB(255, 124, 70, 216),
     brightness: Brightness.dark,
   ),
 );
