@@ -6,6 +6,7 @@ import 'bottom_bar.dart';
 import 'app_state.dart';
 import 'LogsPage.dart';
 import 'package:provider/provider.dart';
+import 'netcheck.dart' show NetCheck, runChecks;
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key});
@@ -46,6 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
     prefs.setString('shockerId', shockerIdController.text);
     intensityLimitController.text = prefs.getString('intensityLimit') ?? '100';
     durationLimitController.text = prefs.getString('durationLimit') ?? '30';
+    // await NetCheck.runChecks();
     Navigator.pop(context);
   }
 
@@ -117,6 +119,15 @@ class _SettingsPageState extends State<SettingsPage> {
             ElevatedButton(
               onPressed: saveSettings,
               child: const Text('Save'),
+            ),
+            const SizedBox(height: 15),
+            // Add the new text below the Save button
+            const Text(
+              'App Version: 0.2-beta5 - Build Date: Nov. 13, 2023\n'
+              'This application is in no way, shape, or form affiliated with the openshock team.\n'
+              '(C) Mercury -as- olbiaphlee 2023. Reproduction and modification is allowed in accordance with the license found in the app\'s git ',
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 12),
             ),
           ],
         ),
