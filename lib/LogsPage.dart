@@ -80,7 +80,7 @@ class _LogsPageState extends State<LogsPage> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-
+    appState.currentIndex = 2;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Logs'),
@@ -90,45 +90,33 @@ class _LogsPageState extends State<LogsPage> {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: DataTable(
-                      columns: const [
-                        DataColumn(label: Text('Name')),
-                        DataColumn(label: Text('Intensity')),
-                        DataColumn(label: Text('Duration (s)')),
-                        DataColumn(label: Text('Type')),
+            child: DataTable(
+              columns: const [
+                DataColumn(label: Text('Name')),
+                DataColumn(label: Text('Intensity')),
+                DataColumn(label: Text('Duration (s)')),
+                DataColumn(label: Text('Type')),
+              ],
+              rows: logs.map((log) {
+                final controlledBy = log['controlledBy'] as Map<String, dynamic>?;
+                if (controlledBy != null) {
+                  final name = getDisplayName(controlledBy);
+                  final intensity = log['intensity'] as int?;
+                  final duration = (log['duration'] as int?)! / 1000;
+                  final type = log['type'] as String?;
+                  if (intensity != null && type != null) {
+                    return DataRow(
+                      cells: [
+                        DataCell(Text(name)),
+                        DataCell(Text(intensity.toString())),
+                        DataCell(Text(duration.toString())),
+                        DataCell(getIconForType(type)),
                       ],
-                      rows: logs.map((log) {
-                        final controlledBy =
-                            log['controlledBy'] as Map<String, dynamic>?;
-                        if (controlledBy != null) {
-                          final name = getDisplayName(controlledBy);
-                          final intensity = log['intensity'] as int?;
-                          final duration = (log['duration'] as int?)! / 1000;
-                          final type = log['type'] as String?;
-                          if (intensity != null && type != null) {
-                            return DataRow(
-                              cells: [
-                                DataCell(Text(name)),
-                                DataCell(Text(intensity.toString())),
-                                DataCell(Text(duration.toString())),
-                                DataCell(getIconForType(type)),
-                              ],
-                            );
-                          }
-                        }
-
-                        return const DataRow(cells: []);
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
+                    );
+                  }
+                }
+                return const DataRow(cells: []);
+              }).toList(),
             ),
           ),
         ),

@@ -66,7 +66,7 @@ class _SliderPageState extends State<SliderPage> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-
+    appState.currentIndex = 0;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Openshock Companion'),

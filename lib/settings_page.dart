@@ -52,7 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-
+    appState.currentIndex = 1;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -127,13 +127,14 @@ class _SettingsPageState extends State<SettingsPage> {
           appState.currentIndex = index;
           setState(() {
             if (index == 0) {
-              appState.currentIndex = 0;
               Navigator.popUntil(context, (route) => route.isFirst);
+              appState.currentIndex = 0;
             } else if (index == 2) {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LogsPage()),
               );
+              appState.currentIndex = 2;
             }
           });
         },
