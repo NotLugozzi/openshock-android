@@ -29,7 +29,7 @@ class _LogsPageState extends State<LogsPage> {
     final shockerId = prefs.getString('shockerId');
 
     if (apiKey == null || shockerId == null) {
-      // fuck you i'm not going to properly handle missing stuff
+      // fuck you i dont handle missing stuff
       return;
     }
 
@@ -50,7 +50,7 @@ class _LogsPageState extends State<LogsPage> {
         });
       }
     } else {
-      // fuck you i'm not going to properly handle missing stuff
+      // Fuck you im not handling errors either 
     }
   }
 
@@ -87,16 +87,15 @@ class _LogsPageState extends State<LogsPage> {
       ),
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
-        child: Scrollbar(
-          thumbVisibility: true,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Logs'),
-                Expanded(
-                  child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
                     child: DataTable(
                       columns: const [
                         DataColumn(label: Text('Name')),
@@ -128,8 +127,8 @@ class _LogsPageState extends State<LogsPage> {
                       }).toList(),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
