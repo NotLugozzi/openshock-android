@@ -6,7 +6,8 @@ import 'bottom_bar.dart';
 import 'app_state.dart';
 import 'LogsPage.dart';
 import 'package:provider/provider.dart';
-import 'netcheck.dart' show NetCheck, runChecks;
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key});
@@ -45,12 +46,60 @@ class _SettingsPageState extends State<SettingsPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('apiKey', apiKeyController.text);
     prefs.setString('shockerId', shockerIdController.text);
-    intensityLimitController.text = prefs.getString('intensityLimit') ?? '100';
-    durationLimitController.text = prefs.getString('durationLimit') ?? '30';
-    // await NetCheck.runChecks();
+    await runChecks();
+
     Navigator.pop(context);
   }
 
+  static Future<void> runChecks() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String apiKey = prefs.getString('apiKey') ?? '';
+    http.Response response1 = await http.get(
+      Uri.parse('https://api.shocklink.net/1/shockers/own'),
+      headers: {
+        'accept': 'application/json',
+        'OpenShockToken': apiKey,
+      },
+    );
+    if (response1.statusCode == 200) {
+      String shockerId = prefs.getString('shockerId') ?? '';
+      http.Response response2 = await http.get(
+        Uri.parse('https://api.shocklink.net/1/shockers/$shockerId'),
+        headers: {
+          'accept': 'application/json',
+          'OpenShockToken': apiKey,
+        },
+      );
+
+      if (response2.statusCode == 200) {
+        showSuccessToast('Information is correct');
+      } else {
+        showToast('Incorrect Shocker ID');
+      }
+    } else {
+      showToast('Incorrect API Key');
+    }
+  }
+
+  static void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+    );
+  }
+
+  static void showSuccessToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
@@ -123,9 +172,8 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(height: 15),
             // Add the new text below the Save button
             const Text(
-              'App Version: 0.2-beta5 - Build Date: Nov. 13, 2023\n'
-              'This application is in no way, shape, or form affiliated with the openshock team.\n'
-              '(C) Mercury -as- olbiaphlee 2023. Reproduction and modification is allowed in accordance with the license found in the app\'s git ',
+              'App Version: 0.2-beta6 - Build Date: Nov. 27, 2023\n'
+              '(C) Mercury, 2023',
               textAlign: TextAlign.left,
               style: TextStyle(fontSize: 12),
             ),
