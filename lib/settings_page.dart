@@ -1,5 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, use_build_context_synchronously
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_bar.dart';
@@ -51,6 +50,26 @@ class _SettingsPageState extends State<SettingsPage> {
     Navigator.pop(context);
   }
 
+  Future<String> fetchCommitData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String apiKey = prefs.getString('apiKey') ?? '';
+    http.Response response = await http.get(
+      Uri.parse('https://api.shocklink.net/1'),
+      headers: {
+        'accept': 'application/json',
+        'OpenShockToken': apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseData = json.decode(response.body);
+      String commit = responseData['data']['commit'];
+      return commit.substring(0, 7); // Extract the first 5 characters
+    } else {
+      throw Exception('Failed to load version data');
+    }
+  }
+
   static Future<void> runChecks() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String apiKey = prefs.getString('apiKey') ?? '';
@@ -100,6 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
       textColor: Colors.white,
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
@@ -149,33 +169,27 @@ class _SettingsPageState extends State<SettingsPage> {
               obscureText: !showShockerId,
             ),
             const SizedBox(height: 16),
-            const Text('Intensity Limit'),
-            TextField(
-              controller: intensityLimitController,
-              decoration: const InputDecoration(
-                labelText: 'Intensity Limit',
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text('Duration Limit'),
-            TextField(
-              controller: durationLimitController,
-              decoration: const InputDecoration(
-                labelText: 'Duration Limit',
-              ),
-            ),
-            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: saveSettings,
               child: const Text('Save'),
             ),
             const SizedBox(height: 15),
-            // Add the new text below the Save button
-            const Text(
-              'App Version: 0.2-beta6 - Build Date: Nov. 27, 2023\n'
-              '(C) Mercury, 2023',
-              textAlign: TextAlign.left,
-              style: TextStyle(fontSize: 12),
+            FutureBuilder<String>(
+              future: fetchCommitData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Text('App Version: 0.2-beta7 - Build Date: Dec. 7, 2023\n'
+                    '(C) Mercury, 2023\n'
+                    'Connected to api.shocklink.org, version ${snapshot.data}',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 12),
+                  );
+                }
+              },
             ),
           ],
         ),
