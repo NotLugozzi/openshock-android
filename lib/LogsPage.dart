@@ -1,11 +1,12 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'bottom_bar.dart';
-import 'app_state.dart';
-import 'settings_page.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'app_state.dart';
+import 'bottom_bar.dart';
+import 'settings_page.dart';
 
 class LogsPage extends StatefulWidget {
   const LogsPage({Key? key}) : super(key: key);
@@ -50,7 +51,7 @@ class _LogsPageState extends State<LogsPage> {
         });
       }
     } else {
-      // Fuck you im not handling errors either 
+      // Fuck you im not handling errors either
     }
   }
 
@@ -96,21 +97,36 @@ class _LogsPageState extends State<LogsPage> {
                 DataColumn(label: Text('Intensity')),
                 DataColumn(label: Text('Duration (s)')),
                 DataColumn(label: Text('Type')),
+                DataColumn(label: Text('Created At')),
               ],
               rows: logs.map((log) {
-                final controlledBy = log['controlledBy'] as Map<String, dynamic>?;
+                final controlledBy =
+                    log['controlledBy'] as Map<String, dynamic>?;
                 if (controlledBy != null) {
                   final name = getDisplayName(controlledBy);
                   final intensity = log['intensity'] as int?;
                   final duration = (log['duration'] as int?)! / 1000;
                   final type = log['type'] as String?;
-                  if (intensity != null && type != null) {
+                  final createdAt = log['createdOn'] as String?;
+
+                  if (intensity != null && type != null && createdAt != null) {
+                    final userTimezone =
+                        DateTime.now().timeZoneOffset; // Get user's timezone
+
+                    final utcDateTime = DateTime.parse(createdAt);
+                    final localDateTime = utcDateTime
+                        .add(userTimezone); // Convert to local timezone
+
+                    final formattedCreatedAt =
+                        DateFormat('dd/MM/yy - HH:mm').format(localDateTime);
+
                     return DataRow(
                       cells: [
                         DataCell(Text(name)),
                         DataCell(Text(intensity.toString())),
                         DataCell(Text(duration.toString())),
                         DataCell(getIconForType(type)),
+                        DataCell(Text(formattedCreatedAt)),
                       ],
                     );
                   }

@@ -10,10 +10,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Dart
-      uses: dart-lang/setup-dart@v2
+      uses: dart-lang/setup-dart@v1
 
     - name: Get Dependencies
       run: flutter pub get

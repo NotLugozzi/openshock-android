@@ -178,15 +178,16 @@ class _SettingsPageState extends State<SettingsPage> {
               future: fetchCommitData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  return Text('App Version: 0.2-beta7 - Build Date: Dec. 7, 2023\n'
+                  return Text(
+                    'App Version: 0.3-rc0 - Build Date: Dec. 7, 2023\n'
                     '(C) Mercury, 2023\n'
                     'Connected to api.shocklink.org, version ${snapshot.data}',
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 12),
+                    style: const TextStyle(fontSize: 12),
                   );
                 }
               },
