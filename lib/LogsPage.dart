@@ -28,6 +28,7 @@ class _LogsPageState extends State<LogsPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final apiKey = prefs.getString('apiKey');
     final shockerId = prefs.getString('shockerId');
+    final logvalue = prefs.getDouble('logsSharedPreferenceKey') ?? 30;
 
     if (apiKey == null || shockerId == null) {
       // fuck you i dont handle missing stuff
@@ -35,7 +36,7 @@ class _LogsPageState extends State<LogsPage> {
     }
 
     final url =
-        'https://api.shocklink.net/1/shockers/$shockerId/logs?offset=0&limit=30';
+        'https://api.shocklink.net/1/shockers/$shockerId/logs?offset=0&limit=40';
 
     final response = await http.get(Uri.parse(url), headers: {
       'accept': 'application/json',
@@ -92,12 +93,14 @@ class _LogsPageState extends State<LogsPage> {
           scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(
             child: DataTable(
+              columnSpacing: 10,
+              dataRowMaxHeight: 50,
               columns: const [
                 DataColumn(label: Text('Name')),
                 DataColumn(label: Text('Intensity')),
-                DataColumn(label: Text('Duration (s)')),
+                DataColumn(label: Text('Duration')),
                 DataColumn(label: Text('Type')),
-                DataColumn(label: Text('Created At')),
+                DataColumn(label: Text('Time')),
               ],
               rows: logs.map((log) {
                 final controlledBy =

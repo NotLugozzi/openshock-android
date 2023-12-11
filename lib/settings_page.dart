@@ -24,6 +24,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
   bool showApiKey = false;
   bool showShockerId = false;
+  double numberOfLogs = 30; // Default value for the number of logs
+  static const String logsSharedPreferenceKey =
+      'nlogs'; // Shared preference key
 
   @override
   void initState() {
@@ -38,6 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
       shockerIdController.text = prefs.getString('shockerId') ?? '';
       intensityLimitController.text = prefs.getString('intensityLimit') ?? '';
       durationLimitController.text = prefs.getString('durationLimit') ?? '';
+      numberOfLogs = prefs.getDouble(logsSharedPreferenceKey) ?? 30;
     });
   }
 
@@ -46,6 +50,9 @@ class _SettingsPageState extends State<SettingsPage> {
     prefs.setString('apiKey', apiKeyController.text);
     prefs.setString('shockerId', shockerIdController.text);
     await runChecks();
+
+    // Save the selected number of logs to shared preferences
+    prefs.setDouble(logsSharedPreferenceKey, numberOfLogs);
 
     Navigator.pop(context);
   }
@@ -169,6 +176,24 @@ class _SettingsPageState extends State<SettingsPage> {
               obscureText: !showShockerId,
             ),
             const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Logs to be fetched: ${numberOfLogs.toInt()}'),
+                Slider(
+                  value: numberOfLogs,
+                  min: 0,
+                  max: 100,
+                  divisions: 100,
+                  onChanged: (newValue) {
+                    setState(() {
+                      numberOfLogs = newValue;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: saveSettings,
               child: const Text('Save'),
@@ -183,7 +208,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return Text(
-                    'App Version: 0.3-rc0 - Build Date: Dec. 7, 2023\n'
+                    'App Version: 0.3-rc0[hf] - Build Date: Dec. 11, 2023\n'
                     '(C) Mercury, 2023\n'
                     'Connected to api.shocklink.org, version ${snapshot.data}',
                     textAlign: TextAlign.left,
