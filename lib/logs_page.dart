@@ -60,7 +60,6 @@ class _LogsPageState extends State<logs_page> {
   }
 
   Icon getIconForType(String type) {
-    print('Type: $type');
     switch (type.toLowerCase()) {
       case 'vibrate':
         return const Icon(Icons.vibration);
@@ -82,62 +81,85 @@ class _LogsPageState extends State<logs_page> {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
     appState.currentIndex = 2;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Logs'),
       ),
-      body: RefreshIndicator(
-        onRefresh: _handleRefresh,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SingleChildScrollView(
-            child: DataTable(
-              columnSpacing: 10,
-              dataRowMaxHeight: 50,
-              columns: const [
-                DataColumn(label: Text('Name')),
-                DataColumn(label: Text('Intensity')),
-                DataColumn(label: Text('Duration')),
-                DataColumn(label: Text('Type')),
-                DataColumn(label: Text('Time')),
-              ],
-              rows: logs.map((log) {
-                final controlledBy =
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isLandscape =
+              MediaQuery.of(context).orientation == Orientation.landscape;
+
+          return RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SingleChildScrollView(
+                child: DataTable(
+                  columnSpacing: 10,
+                  columns: [
+                    DataColumn(label: SizedBox(
+                      width: isLandscape ? constraints.maxWidth * 0.25 : null,
+                      child: Text('Name'),
+                    )),
+                    DataColumn(label: SizedBox(
+                      width: isLandscape ? constraints.maxWidth * 0.15 : null,
+                      child: Text('Intensity'),
+                    )),
+                    DataColumn(label: SizedBox(
+                      width: isLandscape ? constraints.maxWidth * 0.15
+                          : null,
+                      child: Text('Duration'),
+                    )),
+                    DataColumn(label: SizedBox(
+                      width: isLandscape ? constraints.maxWidth * 0.15 : null,
+                      child: Text('Type'),
+                    )),
+                    DataColumn(label: SizedBox(
+                      width: isLandscape ? constraints.maxWidth * 0.2 : null,
+                      child: Text('Time'),
+                    )),
+                  ],
+                  rows: logs.map<DataRow>((log) {
+                    final controlledBy =
                     log['controlledBy'] as Map<String, dynamic>?;
-                if (controlledBy != null) {
-                  final name = getDisplayName(controlledBy);
-                  final intensity = log['intensity'] as int?;
-                  final duration = (log['duration'] as int?)! / 1000;
-                  final type = log['type'] as String?;
-                  final createdAt = log['createdOn'] as String?;
+                    if (controlledBy != null) {
+                      final name = getDisplayName(controlledBy);
+                      final intensity = log['intensity'] as int?;
+                      final duration = (log['duration'] as int?)! / 1000;
+                      final type = log['type'] as String?;
+                      final createdAt = log['createdOn'] as String?;
 
-                  if (intensity != null && type != null && createdAt != null) {
-                    final userTimezone =
-                        DateTime.now().timeZoneOffset; // Get user's timezone
+                      if (intensity != null &&
+                          type != null &&
+                          createdAt != null) {
+                        final userTimezone = DateTime.now().timeZoneOffset;
+                        final utcDateTime = DateTime.parse(createdAt);
+                        final localDateTime =
+                        utcDateTime.add(userTimezone);
 
-                    final utcDateTime = DateTime.parse(createdAt);
-                    final localDateTime = utcDateTime
-                        .add(userTimezone); // Convert to local timezone
+                        final formattedCreatedAt = DateFormat('dd/MM/yy - HH:mm')
+                            .format(localDateTime);
 
-                    final formattedCreatedAt =
-                        DateFormat('dd/MM/yy - HH:mm').format(localDateTime);
-
-                    return DataRow(
-                      cells: [
-                        DataCell(Text(name)),
-                        DataCell(Text(intensity.toString())),
-                        DataCell(Text(duration.toString())),
-                        DataCell(getIconForType(type)),
-                        DataCell(Text(formattedCreatedAt)),
-                      ],
-                    );
-                  }
-                }
-                return const DataRow(cells: []);
-              }).toList(),
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(name)),
+                            DataCell(Text(intensity.toString())),
+                            DataCell(Text(duration.toString())),
+                            DataCell(getIconForType(type)),
+                            DataCell(Text(formattedCreatedAt)),
+                          ],
+                        );
+                      }
+                    }
+                    return DataRow(cells: []);
+                  }).toList(),
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
       bottomNavigationBar: BottomBar(
         currentIndex: appState.currentIndex,

@@ -111,26 +111,35 @@ class _SliderPageState extends State<SliderPage> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.flash_on),
                   label: const Text('Shock'),
-                  onPressed: () {
+                  onPressed: () async {
                     if (intensityValue < 1 || timeValue < 1) {
                       // this whole thing was written by a silly little cat :3
                     } else {
                       HapticFeedback.vibrate();
-                      sendApiRequest(intensityValue, timeValue, 1);
-                      showToast('API request sent');
+                      bool success = await sendApiRequest(
+                          intensityValue, timeValue, 1);
+                      if (success) {
+                        showToast('Shock API request successful');
+                      } else {
+                        showToast('Failed to send Shock API request');
+                      }
                     }
-                  },
-                ),
+                  }
+    ),
                 const SizedBox(width: 8.0),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.vibration),
                   label: const Text('Vibrate'),
-                  onPressed: () {
+                  onPressed: () async {
                     if (intensityValue < 1 || timeValue < 1) {
                     } else {
                       HapticFeedback.vibrate();
-                      sendApiRequest(intensityValue, timeValue, 2);
-                      showToast('API request sent');
+                      bool success = await sendApiRequest(intensityValue, timeValue, 2);
+                      if (success) {
+                        showToast('Vibrate API request successful');
+                      } else {
+                        showToast('Failed to send Vibrate API request');
+                      }
                     }
                   },
                 ),

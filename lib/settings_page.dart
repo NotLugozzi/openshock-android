@@ -7,6 +7,7 @@ import 'logs_page.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'NewShareLinkPage.dart'; 
 
 class settings_page extends StatefulWidget {
   const settings_page({Key? key});
@@ -39,8 +40,6 @@ class _SettingsPageState extends State<settings_page> {
     setState(() {
       apiKeyController.text = prefs.getString('apiKey') ?? '';
       shockerIdController.text = prefs.getString('shockerId') ?? '';
-      intensityLimitController.text = prefs.getString('intensityLimit') ?? '';
-      durationLimitController.text = prefs.getString('durationLimit') ?? '';
       numberOfLogs = prefs.getDouble(logsSharedPreferenceKey) ?? 30;
     });
   }
@@ -50,8 +49,6 @@ class _SettingsPageState extends State<settings_page> {
     prefs.setString('apiKey', apiKeyController.text);
     prefs.setString('shockerId', shockerIdController.text);
     await runChecks();
-
-    // Save the selected number of logs to shared preferences
     prefs.setDouble(logsSharedPreferenceKey, numberOfLogs);
 
     Navigator.pop(context);
@@ -135,7 +132,8 @@ class _SettingsPageState extends State<settings_page> {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: Padding(
+    body: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,6 +197,26 @@ class _SettingsPageState extends State<settings_page> {
               child: const Text('Save'),
             ),
             const SizedBox(height: 15),
+            Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                      Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const NewShareLinkPage()),
+    );
+                },
+                child: const Text('New Share Link'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+
+                },
+                child: const Text('My Share Links'),
+              ),
+            ],
+          ),
             FutureBuilder<String>(
               future: fetchCommitData(),
               builder: (context, snapshot) {
@@ -208,7 +226,7 @@ class _SettingsPageState extends State<settings_page> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return Text(
-                    'App Version: 0.3-rc0[hf] - Build Date: Dec. 11, 2023\n'
+                    'App Version: 0.3-rc3 - Build Date: Dec. 11, 2023\n'
                     '(C) Mercury, 2023\n'
                     'Connected to api.shocklink.org, version ${snapshot.data}',
                     textAlign: TextAlign.left,
@@ -220,6 +238,7 @@ class _SettingsPageState extends State<settings_page> {
           ],
         ),
       ),
+    ),
       bottomNavigationBar: BottomBar(
         currentIndex: appState.currentIndex,
         onTap: (index) {

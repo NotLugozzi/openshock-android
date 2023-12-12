@@ -49,7 +49,7 @@ Future<void> saveSettings(String apiKey, String shockerId) async {
   await prefs.setString('shockerId', shockerId);
 }
 
-Future<void> sendApiRequest(int intensity, int time, int type) async {
+Future<bool> sendApiRequest(int intensity, int time, int type) async {
   // Fetch saved information from SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   
@@ -82,13 +82,8 @@ Future<void> sendApiRequest(int intensity, int time, int type) async {
   );
 
   if (response.statusCode == 200) {
-    // Request successful, handle the response if needed
-    print('API request successful');
-    print(response.body);
+    return true;
   } else {
-    // Request failed, handle the error
-    print('API request failed');
-    print('Status code: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    return false;
   }
 }
