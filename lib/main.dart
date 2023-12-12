@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:OpenshockCompanion/settings_page.dart' show SettingsPage;
-import 'package:OpenshockCompanion/LogsPage.dart' show LogsPage;
-import 'package:OpenshockCompanion/api_handler.dart' show sendApiRequest;
+import 'settings_page.dart' show settings_page;
+import 'logs_page.dart' show logs_page;
+import 'api_handler.dart' show sendApiRequest;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_bar.dart';
 import 'app_state.dart';
@@ -43,12 +43,6 @@ class MyApp extends StatelessWidget {
   Future<bool> getIsDarkMode() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isDarkMode') ?? false;
-  }
-
-  Future<void> getLimits() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String intensityLimit = prefs.getString('intensityLimit') ?? '';
-    final String durationLimit = prefs.getString('durationLimit') ?? '';
   }
 }
 
@@ -155,12 +149,12 @@ class _SliderPageState extends State<SliderPage> {
             } else if (index == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
+                MaterialPageRoute(builder: (context) => const settings_page()),
               );
             } else if (index == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LogsPage()),
+                MaterialPageRoute(builder: (context) => const logs_page()),
               );
             }
           });

@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_bar.dart';
 import 'app_state.dart';
-import 'LogsPage.dart';
+import 'logs_page.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key});
+class settings_page extends StatefulWidget {
+  const settings_page({Key? key});
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends State<settings_page> {
   final TextEditingController apiKeyController = TextEditingController();
   final TextEditingController shockerIdController = TextEditingController();
   final TextEditingController intensityLimitController =
@@ -231,7 +231,7 @@ class _SettingsPageState extends State<SettingsPage> {
             } else if (index == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LogsPage()),
+                MaterialPageRoute(builder: (context) => const logs_page()),
               );
               appState.currentIndex = 2;
             }

@@ -8,14 +8,14 @@ import 'app_state.dart';
 import 'bottom_bar.dart';
 import 'settings_page.dart';
 
-class LogsPage extends StatefulWidget {
-  const LogsPage({Key? key}) : super(key: key);
+class logs_page extends StatefulWidget {
+  const logs_page({Key? key}) : super(key: key);
 
   @override
   _LogsPageState createState() => _LogsPageState();
 }
 
-class _LogsPageState extends State<LogsPage> {
+class _LogsPageState extends State<logs_page> {
   List<Map<String, dynamic>> logs = [];
 
   @override
@@ -28,7 +28,6 @@ class _LogsPageState extends State<LogsPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final apiKey = prefs.getString('apiKey');
     final shockerId = prefs.getString('shockerId');
-    final logvalue = prefs.getDouble('logsSharedPreferenceKey') ?? 30;
 
     if (apiKey == null || shockerId == null) {
       // fuck you i dont handle missing stuff
@@ -151,7 +150,7 @@ class _LogsPageState extends State<LogsPage> {
             } else if (index == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
+                MaterialPageRoute(builder: (context) => const settings_page()),
               );
             }
           });
