@@ -4,7 +4,7 @@ description: Companion app for managing openshock-compatible devices
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none'
 
-version: 0.3.0
+version: 0.3.5
 
 environment:
   sdk: '>=3.1.2 <4.0.0'

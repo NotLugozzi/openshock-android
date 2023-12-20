@@ -226,7 +226,7 @@ class _SettingsPageState extends State<settings_page> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return Text(
-                    'App Version: 0.3-rc3 - Build Date: Dec. 11, 2023\n'
+                    'App Version: 0.3.5 - Build Date: Dec.20, 2023\n'
                     '(C) Mercury, 2023\n'
                     'Connected to api.shocklink.org, version ${snapshot.data}',
                     textAlign: TextAlign.left,
