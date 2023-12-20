@@ -21,16 +21,6 @@ jobs:
     - name: Get dependencies
       run: flutter pub get
 
-    - name: Build Release iOS
-      run: flutter build ios --release
-      working-directory: ${{ github.workspace }}
-
-    - name: Upload Release IPA artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-release
-        path: build/ios/runner/Release.ipa
-
     - name: Build Debug iOS
       run: flutter build ios --debug
       working-directory: ${{ github.workspace }}
