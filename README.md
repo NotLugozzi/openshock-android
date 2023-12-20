@@ -11,9 +11,6 @@ Flutter application to manage and control openshock devices from your phone.
 
 Current build status(android): [![Nightly Android](https://github.com/NotLugozzi/openshock-android/actions/workflows/build-android.yml/badge.svg)](https://github.com/NotLugozzi/openshock-android/actions/workflows/build-android.yml)
 
-Current build status(iOS): [![Nightly iOS](https://github.com/NotLugozzi/openshock-android/actions/workflows/build-ios.yml/badge.svg)](https://github.com/NotLugozzi/openshock-android/actions/workflows/build-ios.yml)
-
-
 # Installing
 ## Stable release channel
 Grab one of the builds from the releases page or run:
