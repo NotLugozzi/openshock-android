@@ -50,7 +50,8 @@ Install the suggested Flutter, Dart, and linting extensions in Visual Studio Cod
 flutter doctor
 ```
 
-Once you've done that, from the same terminal, run this command to generate a .IPA file - once you're done it's a matter of sideloading it to your device. since i've never owned an apple device i have no idea how to do that. iOS artifacts are saved in `build/ios/runner/`
+Once you've done that, from the same terminal, run this command to generate a .IPA file - once you're done it's a matter of sideloading it to your device. since i've never owned an apple device i have no idea how to do that. iOS artifacts are saved in `build/ios/runner/`.
 ```bash
 flutter build ios --debug
 ```
+
