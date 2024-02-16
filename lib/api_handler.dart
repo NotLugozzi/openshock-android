@@ -72,6 +72,7 @@ Future<bool> sendApiRequest(int intensity, int time, int type) async {
   final Map<String, String> headers = {
     'Content-Type': 'application/json',
     'OpenShockToken': apiKey,
+    'User-Agent': 'Dart/3.3.0 (Linux; Android; osc-android Build/202402) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36'
   };
 
   // Make the API request

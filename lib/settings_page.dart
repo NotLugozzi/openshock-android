@@ -26,6 +26,7 @@ class _SettingsPageState extends State<settings_page> {
   bool showApiKey = false;
   bool showShockerId = false;
   double numberOfLogs = 30; // Default value for the number of logs
+  String userAgent = "Dart/3.3.0 (Linux; U; Android 14; osc-android Build/202402) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"
   static const String logsSharedPreferenceKey =
       'nlogs'; // Shared preference key
 
@@ -62,6 +63,7 @@ class _SettingsPageState extends State<settings_page> {
       headers: {
         'accept': 'application/json',
         'OpenShockToken': apiKey,
+        'User-Agent': userAgent,
       },
     );
 
@@ -82,6 +84,7 @@ class _SettingsPageState extends State<settings_page> {
       headers: {
         'accept': 'application/json',
         'OpenShockToken': apiKey,
+        'User-Agent': userAgent,
       },
     );
     if (response1.statusCode == 200) {
@@ -91,6 +94,7 @@ class _SettingsPageState extends State<settings_page> {
         headers: {
           'accept': 'application/json',
           'OpenShockToken': apiKey,
+          'User-Agent': userAgent,
         },
       );
 
@@ -226,8 +230,8 @@ class _SettingsPageState extends State<settings_page> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return Text(
-                    'App Version: 0.3.5 - Build Date: Dec.20, 2023\n'
-                    '(C) Mercury, 2023\n'
+                    'App Version: 0.4.1 - Build Date: Feb.16, 2024\n'
+                    '(C) Mercury, 2024\n'
                     'Connected to api.shocklink.org, version ${snapshot.data}',
                     textAlign: TextAlign.left,
                     style: const TextStyle(fontSize: 12),
