@@ -23,7 +23,7 @@ class _LogsPageState extends State<logs_page> {
     super.initState();
     fetchLogs();
   }
-  String userAgent = "Dart/3.3.0 (Linux; Android;  osc-android Build/202402) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"
+  String userAgent = "Dart/3.3.0 (Linux; Android;  osc-android Build/202402) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36";
   Future<void> fetchLogs() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final apiKey = prefs.getString('apiKey');
