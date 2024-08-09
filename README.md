@@ -14,7 +14,7 @@ Current build status(android): [![Nightly Android](https://github.com/NotLugozzi
 # Installing
 ## Stable release channel
 Grab one of the builds from the releases page or run:
-```bash
+```bash 
 flutter build apk
 ```
 Production artifacts will be found in the `build\app\outputs\apk\` directory.
